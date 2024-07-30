@@ -130,8 +130,8 @@ model Role {
 model Invite {
   id       String @id @default(cuid())
   org_id   String
-  email String
-  role String @db.VarChar
+  email    String
+  role     OrgRole @default(USER)
   organization Organization? @relation(fields: [org_id], references: [id], onUpdate: NoAction)
   @@map(name: "invites")
 }
