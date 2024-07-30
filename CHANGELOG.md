@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.0.0...v1.0.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* change LocalePrefix import type into next-intl/routing ([601ab92](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/commit/601ab923e186317faf9645dca92968c705e87f18))
+
 # 1.0.0 (2024-07-30)
 
 
