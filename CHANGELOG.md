@@ -1,3 +1,10 @@
+# 1.0.0 (2024-07-30)
+
+
+### Bug Fixes
+
+* change invite schema for fixed role ([1859855](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/commit/1859855b2b5e6e842c013fc32eac35aebd67d352))
+
 ## [1.2.2](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.2.1...v1.2.2) (2024-07-30)
 
 
