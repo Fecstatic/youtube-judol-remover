@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.0.1...v1.1.0) (2024-08-02)
+
+
+### Features
+
+* add team feature such as basic CRUD and invitation system ([551ad46](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/commit/551ad467c1b6a75da493278ec6a958b22add57d0))
+
 ## [1.0.1](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.0.0...v1.0.1) (2024-07-30)
 
 
