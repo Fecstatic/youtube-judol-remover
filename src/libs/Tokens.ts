@@ -79,3 +79,23 @@ export const generateTwoFactorToken = async (email: string) => {
 
   return twoFactorToken;
 };
+
+export const generateInviteToken = async (email: string, org_id: string) => {
+  const token = uuidv4();
+  const expires = new Date(new Date().getTime() + 3600 * 1000);
+
+  const existingToken = await db.invite.findFirst({ where: { email, org_id } });
+
+  if (existingToken) {
+    await db.invite.delete({
+      where: { id: existingToken.id },
+    });
+  }
+
+  const passwordResetToken = {
+    token,
+    expires,
+  };
+
+  return passwordResetToken;
+};

@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useCallback, useState, useTransition } from 'react';
 import { type FileWithPath, useDropzone } from 'react-dropzone';
@@ -9,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type * as z from 'zod';
 
-import { changePicture } from '@/actions/Users';
+import { changeAvatar } from '@/actions/Organization';
 import { ImageCropper } from '@/components/dashboard/image-cropper';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -28,8 +27,13 @@ export type FileWithPreview = FileWithPath & {
   preview: string;
 };
 
-export const ChangeAvatarForm = () => {
-  const { data: session, update } = useSession();
+export const ChangeAvatarForm = ({
+  orgId,
+  avatar,
+}: {
+  orgId: string;
+  avatar: string;
+}) => {
   const t = useTranslations('Account');
   const [isPending, startTransition] = useTransition();
   const { startUpload } = useUploadThing('avatar', {
@@ -82,7 +86,7 @@ export const ChangeAvatarForm = () => {
     const res = await startUpload([values.avatar[0]]);
     startTransition(() => {
       // @ts-ignore
-      changePicture(res[0].url)
+      changeAvatar(res[0].url, orgId)
         // eslint-disable-next-line consistent-return
         .then((data) => {
           // @ts-ignore
@@ -96,7 +100,6 @@ export const ChangeAvatarForm = () => {
           if (data?.success) {
             form.reset();
             toast.success(data.success);
-            update({ image: data.data.image });
           }
         })
         .catch(() => {
@@ -137,12 +140,7 @@ export const ChangeAvatarForm = () => {
                         className="size-36 cursor-pointer ring-2 ring-border ring-offset-2 ring-offset-white dark:ring-offset-black"
                       >
                         <Input {...getInputProps()} />
-                        <AvatarImage
-                          // @ts-ignore
-                          src={session?.user?.image}
-                          // @ts-ignore
-                          alt={session?.user?.name}
-                        />
+                        <AvatarImage src={avatar} alt={orgId} />
                         <AvatarFallback>Select File</AvatarFallback>
                       </Avatar>
                     )}

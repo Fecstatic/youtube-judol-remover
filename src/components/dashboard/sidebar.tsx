@@ -24,7 +24,7 @@ export function Sidebar() {
       <div
         className={`relative flex h-full flex-col border-r px-1 py-2 ${sidebar?.isOpen === true ? 'overflow-y-auto' : 'overflow-hidden'} dark:shadow-zinc-800`}
       >
-        <TeamSwitcher state={sidebar?.isOpen} />
+        <TeamSwitcher state={sidebar?.isOpen} personal />
         <Menu isOpen={sidebar?.isOpen} />
       </div>
     </aside>

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 // @ts-nocheck
 
 'use client';
@@ -12,7 +13,8 @@ import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
-import { useState, useTransition } from 'react';
+import { useCallback, useState, useTransition } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
@@ -20,6 +22,7 @@ import * as z from 'zod';
 
 import {
   getOrganizationById,
+  getOrganizationByIdOnlyTeam,
   getOrganizationDoubleName,
   newOrganization,
 } from '@/actions/Organization';
@@ -67,10 +70,12 @@ import {
   Stepper,
   useStepper,
 } from '@/components/ui/stepper';
+import { useUploadThing } from '@/libs/UploadAThing';
 import { setSelectedTeam } from '@/redux/team-slice';
 import { OrganizationSchema } from '@/schemas';
 import { cn } from '@/utils/Helpers';
-import { UploadButton } from '@/utils/Uploadthing';
+
+import { ImageCropper } from './image-cropper';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -78,12 +83,18 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 
 interface TeamSwitcherProps extends PopoverTriggerProps {
   state: boolean;
+  personal?: boolean;
 }
 
-export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
+export default function TeamSwitcher({
+  className,
+  state,
+  personal,
+}: TeamSwitcherProps) {
   const t = useTranslations('Organization');
   const [open, setOpen] = useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
+  const [isDialogOpen, setDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const email = Cookies.get('next-auth.session-email');
   const name = Cookies.get('next-auth.session-name');
@@ -100,22 +111,48 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
       .toUpperCase();
   };
 
-  const [groups, setGroups] = useState([
-    {
-      label: t('account'),
-      teams: [
-        {
-          label: name,
-          picture: `https://avatar.vercel.sh/${initials}.png`,
-          value: 'personal',
-        },
-      ],
+  const { startUpload } = useUploadThing('avatar', {
+    onClientUploadComplete: () => {
+      toast.success('Avatar updated successfully');
     },
-    {
-      label: t('teams'),
-      teams: [],
+    onUploadError: () => {
+      toast.error('Something went wrong');
     },
-  ]);
+    onUploadBegin: () => {
+      toast.info('Uploading avatar');
+    },
+  });
+
+  const accept = {
+    'image/*': [],
+  };
+
+  const [groups, setGroups] = useState(
+    personal
+      ? [
+          {
+            label: t('account'),
+            teams: [
+              {
+                label: name,
+                picture: `https://avatar.vercel.sh/${initials}.png`,
+                value: 'personal',
+                role: 'USER',
+              },
+            ],
+          },
+          {
+            label: t('teams'),
+            teams: [],
+          },
+        ]
+      : [
+          {
+            label: t('teams'),
+            teams: [],
+          },
+        ],
+  );
 
   const form = useForm<z.infer<typeof OrganizationSchema>>({
     resolver: zodResolver(OrganizationSchema),
@@ -140,6 +177,38 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
   // @ts-ignore
   // eslint-disable-next-line
   const selectedTeam = useSelector((state) => state.team.selectedTeam);
+
+  const FirstFormSchema = z.object({
+    name: z.string().min(2, {
+      message: 'Name must be at least 2 characters.',
+    }),
+  });
+
+  const form1 = useForm<z.infer<typeof FirstFormSchema>>({
+    resolver: zodResolver(FirstFormSchema),
+    defaultValues: {
+      name: '',
+    },
+  });
+
+  const SecondFormSchema = z.object({
+    avatar: z.optional(
+      z
+        .any()
+        .refine((file) => {
+          return ['image/jpeg', 'image/jpg', 'image/png'].includes(
+            file?.[0]?.type,
+          );
+        }, 'File must be a image')
+        .refine((file) => {
+          return !file || file?.[0].size <= 1024 * 1024 * 4;
+        }, 'File size must be less than 4MB'),
+    ),
+  });
+
+  const form2 = useForm<z.infer<typeof SecondFormSchema>>({
+    resolver: zodResolver(SecondFormSchema),
+  });
 
   function StepperFormActions() {
     const {
@@ -169,10 +238,13 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
               {activeStep === 0 ? t('cancel') : t('back')}
             </Button>
             <Button size="sm">
-              {
-                // eslint-disable-next-line no-nested-ternary
-                isLastStep ? 'Finish' : isOptionalStep ? t('skip') : t('next')
-              }
+              {isLastStep && form2.getValues('avatar')
+                ? t('upload')
+                : isLastStep
+                  ? t('skip')
+                  : isOptionalStep
+                    ? t('skip')
+                    : t('next')}
             </Button>
           </>
         )}
@@ -180,21 +252,8 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
     );
   }
 
-  const FirstFormSchema = z.object({
-    name: z.string().min(2, {
-      message: 'Name must be at least 2 characters.',
-    }),
-  });
-
   function FirstStepForm() {
     const { nextStep } = useStepper();
-
-    const form1 = useForm<z.infer<typeof FirstFormSchema>>({
-      resolver: zodResolver(FirstFormSchema),
-      defaultValues: {
-        name: '',
-      },
-    });
 
     function onSubmit1(values: z.infer<typeof FirstFormSchema>) {
       getOrganizationDoubleName(values?.name)
@@ -241,22 +300,40 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
     );
   }
 
-  const SecondFormSchema = z.object({
-    picture: z.string().optional(),
-  });
-
   function SecondStepForm() {
     const { nextStep } = useStepper();
 
-    const form2 = useForm<z.infer<typeof SecondFormSchema>>({
-      resolver: zodResolver(SecondFormSchema),
+    const onDrop = useCallback(
+      (acceptedFiles: FileWithPath[]) => {
+        const file = acceptedFiles[0];
+        if (!file) {
+          toast.error('File size must be less than 4MB');
+          return;
+        }
+
+        const fileWithPreview = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+
+        form2.setValue('avatar', [fileWithPreview], { shouldValidate: true });
+        setDialogOpen(true);
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    );
+
+    const { getRootProps, getInputProps } = useDropzone({
+      onDrop,
+      accept,
     });
 
     // eslint-disable-next-line consistent-return
-    function onSubmit2(values: z.infer<typeof SecondFormSchema>) {
-      if (values.picture) {
-        form.setValue('picture', values.picture, { shouldValidate: true });
+    async function onSubmit2(values: z.infer<typeof SecondFormSchema>) {
+      if (values.avatar) {
+        const res = await startUpload(values.avatar);
+        form.setValue('picture', res[0].url, { shouldValidate: true });
         nextStep();
+        form2.reset();
         return toast.success('Picture added!');
       }
       nextStep();
@@ -266,17 +343,28 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
     return (
       <Form {...form2}>
         <form onSubmit={form2.handleSubmit(onSubmit2)} className="space-y-6">
-          <UploadButton
-            endpoint="imageUploader"
-            onClientUploadComplete={(res) => {
-              const url = res?.[0]?.url;
-              form2.setValue('picture', url, { shouldValidate: true });
-              toast.success('Upload Success!');
-            }}
-            onUploadError={(error: Error) => {
-              toast.error(error.message);
-            }}
-          />
+          <div className="flex justify-center">
+            {form2.getValues('avatar') ? (
+              <ImageCropper
+                dialogOpen={isDialogOpen}
+                setDialogOpen={setDialogOpen}
+                selectedFile={form2.getValues('avatar')[0]}
+                setSelectedFile={(file) =>
+                  form2.setValue('avatar', [file], {
+                    shouldValidate: true,
+                  })
+                }
+              />
+            ) : (
+              <Avatar
+                {...getRootProps()}
+                className="size-36 cursor-pointer ring-2 ring-border ring-offset-2 ring-offset-white dark:ring-offset-black"
+              >
+                <Input {...getInputProps()} />
+                <AvatarFallback>Select File</AvatarFallback>
+              </Avatar>
+            )}
+          </div>
           <StepperFormActions />
         </form>
       </Form>
@@ -370,12 +458,14 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
 
   React.useEffect(() => {
     async function fetchData() {
-      const data = await getOrganizationById();
+      const data = personal
+        ? await getOrganizationById()
+        : await getOrganizationByIdOnlyTeam();
       // @ts-ignore
       setGroups(data);
     }
     fetchData();
-  }, []);
+  }, [[personal]]);
 
   return (
     <ResponsiveDialog
@@ -480,7 +570,12 @@ export default function TeamSwitcher({ className, state }: TeamSwitcherProps) {
         </ResponsiveDialogHeader>
         <ResponsiveDialogBody>
           <div className="flex w-full flex-col gap-4">
-            <Stepper variant="circle-alt" initialStep={0} steps={steps}>
+            <Stepper
+              variant="circle-alt"
+              initialStep={0}
+              steps={steps}
+              responsive
+            >
               {steps.map((stepProps, index) => {
                 if (index === 0) {
                   return (

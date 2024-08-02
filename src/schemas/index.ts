@@ -277,3 +277,10 @@ export const NewPasswordSchema = z
 export const SettingsSchema = z.object({
   isTwoFactorEnabled: z.boolean(),
 });
+
+export const InviteSchema = z.object({
+  email: z.string().email({
+    message: 'Email is required',
+  }),
+  role: z.enum(['ADMIN', 'USER']),
+});

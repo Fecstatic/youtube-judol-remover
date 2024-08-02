@@ -6,6 +6,7 @@ const initialState = {
     label: Cookies.get('next-auth.session-name') || 'Fecstastic',
     picture: null,
     value: 'personal',
+    role: 'USER',
   },
 };
 

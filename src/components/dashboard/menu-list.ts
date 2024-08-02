@@ -7,6 +7,7 @@ import {
   Tag,
   Users,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Submenu {
   href: string;
@@ -28,13 +29,15 @@ interface Group {
 }
 
 export function getMenuList(pathname: string): Group[] {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const t = useTranslations('Sidebar');
   return [
     {
       groupLabel: '',
       menus: [
         {
           href: '/dashboard',
-          label: 'Dashboard',
+          label: t('dashboard'),
           active: pathname.includes('/dashboard'),
           icon: LayoutGrid,
           submenus: [],
@@ -79,18 +82,18 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: 'Settings',
+      groupLabel: t('settings'),
       menus: [
         {
-          href: '/users',
-          label: 'Users',
-          active: pathname.includes('/users'),
+          href: '/team',
+          label: t('team'),
+          active: pathname.includes('/team'),
           icon: Users,
           submenus: [],
         },
         {
           href: '/account',
-          label: 'Account',
+          label: t('account'),
           active: pathname.includes('/account'),
           icon: Settings,
           submenus: [],

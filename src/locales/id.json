@@ -231,6 +231,8 @@
     "picture": "Gambar",
     "picture_placeholder": "Unggah gambar profil organisasi Anda",
     "cancel": "Batal",
+    "upload": "Unggah",
+    "Finish": "Selesai",
     "next": "Berikutnya",
     "back": "Kembali",
     "skip": "Lewati",
@@ -393,5 +395,23 @@
     "message_title": "Message",
     "message_description": "Entrez un message détaillé pour votre todo.",
     "submit_button": "Envoyer"
+  },
+  "Sidebar": {
+    "dashboard": "Beranda",
+    "todos": "Todos",
+    "members": "Members",
+    "billing": "Billing",
+    "settings": "Pengaturan",
+    "account": "Akun",
+    "team": "Tim"
+  },
+  "Avatar": {
+    "crop": "Potong",
+    "cancel": "Batal",
+    "loading": "Memuat...",
+    "error": "Gagal memuat gambar"
+  },
+  "Page": {
+    "home": "Beranda"
   }
 }

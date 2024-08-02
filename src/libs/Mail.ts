@@ -43,3 +43,14 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
     html: `<p>Your 2FA code: ${token}</p>`,
   });
 };
+
+export const sendInviteEmail = async (email: string, token: string) => {
+  const acceptLink = `${domain}/invite?token=${token}`;
+
+  await transporter.sendMail({
+    from: `${name} <organization@${domain}>`,
+    to: email,
+    subject: 'You have been invited to join the team',
+    html: `<p>Click <a href="${acceptLink}">here</a> to join.</p>`,
+  });
+};

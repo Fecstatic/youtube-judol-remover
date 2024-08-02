@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Provider } from 'react-redux';
 
 import { Navbar } from '@/components/dashboard/navbar';
@@ -26,6 +27,7 @@ export default function AdminPanelLayout({
   const pathname = usePathname();
   const breadcrumb = pathname.replaceAll('/id', '').split('/').slice(1);
   const sidebar = useStore(useSidebarToggle, (state) => state);
+  const t = useTranslations('Page');
 
   if (!sidebar) return null;
 
@@ -44,7 +46,7 @@ export default function AdminPanelLayout({
             <Breadcrumb className="mb-4">
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                  <BreadcrumbLink href="/">{t('home')}</BreadcrumbLink>
                 </BreadcrumbItem>
                 {breadcrumb.map((item, index) => (
                   <>
@@ -52,14 +54,14 @@ export default function AdminPanelLayout({
                     <BreadcrumbItem>
                       {index === breadcrumb.length - 1 ? (
                         <BreadcrumbPage className="capitalize">
-                          {item}
+                          {item.replaceAll('_', ' ')}
                         </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink
                           href={`/${item}`}
                           className="capitalize"
                         >
-                          {item}
+                          {item.replaceAll('_', ' ')}
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>

@@ -239,6 +239,8 @@
     "picture": "Picture",
     "picture_placeholder": "Upload your organization profile picture",
     "cancel": "Cancel",
+    "upload": "Upload",
+    "Finish": "Finish",
     "next": "Next",
     "back": "Back",
     "skip": "Skip",
@@ -401,5 +403,23 @@
     "message_title": "Message",
     "message_description": "Enter a detailed message for your todo.",
     "submit_button": "Submit"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "todos": "Todos",
+    "members": "Members",
+    "billing": "Billing",
+    "settings": "Settings",
+    "account": "Account",
+    "team": "Team"
+  },
+  "Avatar": {
+    "crop": "Crop",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "error": "Failed to load image"
+  },
+  "Page": {
+    "home": "Home"
   }
 }

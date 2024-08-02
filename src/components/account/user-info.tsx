@@ -15,6 +15,7 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@/components/ui/responsive-dialog';
+import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
@@ -52,13 +53,10 @@ export const UserInfo = ({ user }: UserInfoProps) => {
         <p className="text-center text-2xl font-semibold">{label}</p>
       </CardHeader> */}
       <CardContent className="space-y-4">
-        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        <div className="grid grid-cols-1 items-center gap-2 px-2 md:grid-cols-2 md:gap-0">
           <p className="text-sm font-medium">ID</p>
           <div className="flex gap-2">
             <Input value={user?.id} readOnly />
-            {/* <p className="max-w-[180px] truncate rounded-sm bg-slate-100 p-1 font-mono text-xs dark:bg-slate-900">
-              {user?.id}
-            </p> */}
             <TooltipProvider>
               <Tooltip delayDuration={200}>
                 <TooltipTrigger asChild>
@@ -77,7 +75,8 @@ export const UserInfo = ({ user }: UserInfoProps) => {
             </TooltipProvider>
           </div>
         </div>
-        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        <Separator />
+        <div className="grid grid-cols-1 items-center gap-2 px-2 md:grid-cols-2 md:gap-0">
           <p className="text-sm font-medium">{t('avatar')}</p>
           <div className="flex gap-2">
             <Avatar>
@@ -112,7 +111,8 @@ export const UserInfo = ({ user }: UserInfoProps) => {
             </TooltipProvider>
           </div>
         </div>
-        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        <Separator />
+        <div className="grid grid-cols-1 items-center gap-2 px-2 md:grid-cols-2 md:gap-0">
           <p className="text-sm font-medium">{t('name')}</p>
           <div className="flex gap-2">
             <Input value={user?.name} readOnly />
@@ -142,7 +142,8 @@ export const UserInfo = ({ user }: UserInfoProps) => {
             </TooltipProvider>
           </div>
         </div>
-        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        <Separator />
+        <div className="grid grid-cols-1 items-center gap-2 px-2 md:grid-cols-2 md:gap-0">
           <p className="text-sm font-medium">{t('email')}</p>
           <div className="flex gap-2">
             <Input value={user?.email} readOnly />
@@ -175,35 +176,38 @@ export const UserInfo = ({ user }: UserInfoProps) => {
             {user?.email}
           </p> */}
         </div>
-        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        <Separator />
+        <div className="grid grid-cols-1 items-center gap-2 px-2 md:grid-cols-2 md:gap-0">
           <p className="text-sm font-medium">{t('password')}</p>
-          <TooltipProvider>
-            <Tooltip delayDuration={200}>
-              <TooltipTrigger>
-                <ResponsiveDialog>
-                  <ResponsiveDialogTrigger asChild>
-                    <Button variant="outline" size="icon" className="size-9">
-                      <Pencil className="size-4" />
-                    </Button>
-                  </ResponsiveDialogTrigger>
-                  <ResponsiveDialogContent>
-                    <ResponsiveDialogHeader>
-                      <ResponsiveDialogTitle>
-                        {t('change_password')}
-                      </ResponsiveDialogTitle>
-                    </ResponsiveDialogHeader>
-                    <ChangeForm />
-                  </ResponsiveDialogContent>
-                </ResponsiveDialog>
-              </TooltipTrigger>
-              <TooltipContent align="end" side="left">
-                <p>{t('change_password')}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <div>
+            <TooltipProvider>
+              <Tooltip delayDuration={200}>
+                <TooltipTrigger>
+                  <ResponsiveDialog>
+                    <ResponsiveDialogTrigger asChild>
+                      <Button variant="outline" size="icon" className="size-9">
+                        <Pencil className="size-4" />
+                      </Button>
+                    </ResponsiveDialogTrigger>
+                    <ResponsiveDialogContent>
+                      <ResponsiveDialogHeader>
+                        <ResponsiveDialogTitle>
+                          {t('change_password')}
+                        </ResponsiveDialogTitle>
+                      </ResponsiveDialogHeader>
+                      <ChangeForm />
+                    </ResponsiveDialogContent>
+                  </ResponsiveDialog>
+                </TooltipTrigger>
+                <TooltipContent align="end" side="left">
+                  <p>{t('change_password')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
-
-        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        <Separator />
+        <div className="grid grid-cols-1 items-center gap-2 px-2 md:grid-cols-2 md:gap-0">
           <p className="text-sm font-medium">{t('two_factor')}</p>
           <ChangeTwoFactor isTwoFactorEnabled={user?.isTwoFactorEnabled} />
         </div>

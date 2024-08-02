@@ -132,7 +132,11 @@ model Invite {
   org_id   String
   email    String
   role     OrgRole @default(USER)
-  organization Organization? @relation(fields: [org_id], references: [id], onUpdate: NoAction)
+  token    String  @unique
+  expires  DateTime
+  organization Organization? @relation(fields: [org_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+
+  @@unique([id, token])
   @@map(name: "invites")
 }
 

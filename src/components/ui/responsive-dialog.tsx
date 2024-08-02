@@ -149,7 +149,7 @@ const ResponsiveDialogBody = ({
   ...props
 }: ResponsiveDialogProps) => {
   return (
-    <div className={cn('px-4 lg:px-0', className)} {...props}>
+    <div className={cn('px-2 py-1 md:p-0', className)} {...props}>
       {children}
     </div>
   );
