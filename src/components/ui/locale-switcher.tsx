@@ -11,6 +11,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { usePathname, useRouter } from '@/libs/i18nNavigation';
 import { AppConfig } from '@/utils/AppConfig';
 import { cn } from '@/utils/Helpers';
@@ -32,25 +38,35 @@ export default function LocaleSwitcher({
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className={cn('p-2 focus-visible:ring-offset-0', className)}
-          variant="outline"
-          {...props}
-        >
-          <Globe className="size-[1.2rem] scale-100" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        <DropdownMenuRadioGroup value={locale} onValueChange={handleChange}>
-          {AppConfig.locales.map((elt) => (
-            <DropdownMenuRadioItem key={elt.id} value={elt.id}>
-              {elt.name}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <TooltipProvider disableHoverableContent>
+      <Tooltip delayDuration={100}>
+        <TooltipTrigger>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className={cn('p-2 focus-visible:ring-offset-0', className)}
+                variant="outline"
+                {...props}
+              >
+                <Globe className="size-[1.2rem] scale-100" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuRadioGroup
+                value={locale}
+                onValueChange={handleChange}
+              >
+                {AppConfig.locales.map((elt) => (
+                  <DropdownMenuRadioItem key={elt.id} value={elt.id}>
+                    {elt.name}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">Switch Language</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

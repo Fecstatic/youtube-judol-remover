@@ -18,6 +18,11 @@ enum OrgRole {
   USER
 }
 
+enum Device {
+  MOBILE
+  DESKTOP
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -174,9 +179,10 @@ model TwoFactorConfirmation {
 model Notification {
   id            String   @id @default(cuid())
   userId        String
+  email         String
+  device        Device
   notification  String?
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId, email], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([userId])
   @@map(name: "notifications")
 }

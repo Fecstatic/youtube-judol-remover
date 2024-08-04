@@ -22,11 +22,11 @@ const DashboardIndexPage = () => {
   const id = Cookies.get('next-auth.session-token');
   const Notification = async () => {
     await sendNotification(
-      'just completed a quest',
+      'Your message here',
       // @ts-ignore
       id,
       'https://boilerplate.fecstatic.site/favicon-32x32.png',
-      'Ferdi Rahmad Rizaldi',
+      'App name',
     );
   };
 

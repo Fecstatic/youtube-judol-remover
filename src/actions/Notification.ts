@@ -1,5 +1,6 @@
 'use server';
 
+import type { Device } from '@prisma/client';
 import webpush from 'web-push';
 
 import { db } from '@/libs/Db';
@@ -21,7 +22,7 @@ export const sendNotification = async (
     vapidKeys.privateKey,
   );
 
-  const data = await db.notification.findFirst({
+  const data = await db.notification.findMany({
     where: { userId: user_id },
   });
 
@@ -30,15 +31,38 @@ export const sendNotification = async (
   }
   if (data) {
     try {
-      await webpush.sendNotification(
-        // @ts-ignore
-        JSON.parse(data.notification),
-        JSON.stringify({
-          message: name,
-          icon,
-          body: message,
-        }),
-      );
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      data.forEach(async (data) => {
+        await webpush.sendNotification(
+          // @ts-ignore
+          JSON.parse(data.notification),
+          JSON.stringify({
+            message: name,
+            icon,
+            body: message,
+          }),
+        );
+      });
+      // data.map(async (data) => {
+      //   await webpush.sendNotification(
+      //     // @ts-ignore
+      //     JSON.parse(data.notification),
+      //     JSON.stringify({
+      //       message: name,
+      //       icon,
+      //       body: message,
+      //     }),
+      //   );
+      // });
+      // await webpush.sendNotification(
+      //   // @ts-ignore
+      //   JSON.parse(data.notification),
+      //   JSON.stringify({
+      //     message: name,
+      //     icon,
+      //     body: message,
+      //   }),
+      // );
       return '{}';
     } catch (e) {
       return JSON.stringify({ error: 'failed to send notification' });
@@ -47,10 +71,15 @@ export const sendNotification = async (
   return '{}';
 };
 
-export const addNotification = async (userId: string, notification: string) => {
+export const addNotification = async (
+  userId: string,
+  email: string,
+  device: Device,
+  notification: string,
+) => {
   try {
     const data = await db.notification.findFirst({
-      where: { userId },
+      where: { userId, device },
     });
     if (data) {
       await db.notification.update({
@@ -64,6 +93,8 @@ export const addNotification = async (userId: string, notification: string) => {
     await db.notification.create({
       data: {
         userId,
+        email,
+        device,
         notification,
       },
     });
@@ -73,10 +104,10 @@ export const addNotification = async (userId: string, notification: string) => {
   }
 };
 
-export const deleteNotification = async (userId: string) => {
+export const deleteNotification = async (userId: string, device: Device) => {
   try {
     const data = await db.notification.findFirst({
-      where: { userId },
+      where: { userId, device },
     });
     if (!data) {
       return { error: "Notification doesn't exist" };

@@ -1,5 +1,6 @@
 'use client';
 
+import { Device } from '@prisma/client';
 import { useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import { BellOff, BellRing } from 'lucide-react';
@@ -7,11 +8,22 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { addNotification, deleteNotification } from '@/actions/Notification';
+import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { useMediaQuery } from '@/hooks/UseMediaQuery';
 import { urlB64ToUint8Array } from '@/utils/Helpers';
 
 export default function NotificationRequest() {
   const id = Cookies.get('next-auth.session-id');
+  const email = Cookies.get('next-auth.session-email');
   const queryClient = useQueryClient();
+  const isMobile = useMediaQuery(`(max-width: 768px)`);
+  const device = isMobile ? Device.MOBILE : Device.DESKTOP;
 
   const [notificationPermission, setNotificationPermission] = useState<
     'granted' | 'denied' | 'default'
@@ -32,6 +44,8 @@ export default function NotificationRequest() {
     const { succes, error } = await addNotification(
       // @ts-ignore
       id,
+      email,
+      device,
       JSON.stringify(subscription),
     );
 
@@ -46,7 +60,7 @@ export default function NotificationRequest() {
   const removeNotification = async () => {
     setNotificationPermission('denied');
     // @ts-ignore
-    const { succes, error } = await deleteNotification(id);
+    const { succes, error } = await deleteNotification(id, device);
 
     if (error) {
       toast.error(error);
@@ -97,12 +111,28 @@ export default function NotificationRequest() {
   }, []);
 
   return (
-    <div className=" cursor-pointer transition-all hover:scale-110">
-      {notificationPermission === 'granted' ? (
-        <BellRing onClick={removeNotification} />
-      ) : (
-        <BellOff onClick={showNotification} />
-      )}
-    </div>
+    <TooltipProvider disableHoverableContent>
+      <Tooltip delayDuration={100}>
+        <TooltipTrigger asChild>
+          <Button
+            className="size-8 rounded-full bg-background"
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              notificationPermission === 'granted'
+                ? removeNotification()
+                : showNotification()
+            }
+          >
+            {notificationPermission === 'granted' ? (
+              <BellRing className="size-[1.2rem] scale-100" />
+            ) : (
+              <BellOff className="size-[1.2rem] scale-100" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">Notification</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
