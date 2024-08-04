@@ -2,7 +2,7 @@
 
 import type { OrgRole } from '@prisma/client';
 import { X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import {
@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -68,9 +69,10 @@ export const TeamMemberTable = ({ org_id }: { org_id: string }) => {
   const [list, setList] = useState<Member[]>([]);
   const [id, setId] = useState<string>();
   const [role, setRole] = useState<OrgRole>('USER');
+  const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    async function getMember() {
+  function getMember() {
+    startTransition(async () => {
       const data = await getMemberList(org_id);
       const userId = await getId();
       const OrgRole = data.find((d) => d.id === userId)?.role;
@@ -79,8 +81,12 @@ export const TeamMemberTable = ({ org_id }: { org_id: string }) => {
       setId(userId);
       // @ts-ignore
       setRole(OrgRole);
-    }
+    });
+  }
+
+  useEffect(() => {
     getMember();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [org_id]);
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -89,6 +95,7 @@ export const TeamMemberTable = ({ org_id }: { org_id: string }) => {
     if (res?.error) {
       return toast.error(res.error);
     }
+    getMember();
     return toast.success(res?.success);
   };
 
@@ -113,112 +120,129 @@ export const TeamMemberTable = ({ org_id }: { org_id: string }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {list.map((member: Member) => (
-            <TableRow key={member.id}>
+          {isPending ? (
+            <TableRow>
               <TableCell>
-                <Avatar>
-                  <AvatarImage
-                    src={member.picture}
-                    alt={member.email}
-                    className="rounded-full"
-                  />
-                  <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
-                </Avatar>
+                <Skeleton className="size-10 rounded-full" />
               </TableCell>
               <TableCell>
-                <div>
-                  <p className="font-medium">{member.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {member.email}
-                  </p>
-                </div>
+                <Skeleton className="h-10 w-full rounded-sm" />
               </TableCell>
               <TableCell>
-                <Select
-                  defaultValue={member.role}
-                  disabled={member.role === 'OWNER' || role === 'USER'}
-                  onValueChange={(value: OrgRole) =>
-                    handleRoleChange(member.roleId, value)
-                  }
-                >
-                  <SelectTrigger
-                    className="w-[180px]"
-                    defaultValue={member.role}
-                  >
-                    <SelectValue placeholder={member.role} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="OWNER" disabled={role !== 'OWNER'}>
-                      OWNER
-                    </SelectItem>
-                    <SelectItem value="ADMIN" disabled={role === 'USER'}>
-                      ADMIN
-                    </SelectItem>
-                    <SelectItem value="USER">USER</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Skeleton className="h-10 w-full rounded-sm" />
               </TableCell>
-              <TableCell className="text-right">
-                <TooltipProvider>
-                  <Tooltip delayDuration={200}>
-                    <TooltipTrigger>
-                      <ResponsiveDialog>
-                        <ResponsiveDialogTrigger asChild>
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="h-9 w-11 items-center"
-                            disabled={
-                              member.role === 'OWNER' ||
-                              (role === 'USER' && member.id !== id)
-                            }
-                          >
-                            <X className="size-4" />
-                          </Button>
-                        </ResponsiveDialogTrigger>
-                        <ResponsiveDialogContent className="sm:max-w-md">
-                          <ResponsiveDialogHeader>
-                            <ResponsiveDialogTitle>
-                              Are you sure?
-                            </ResponsiveDialogTitle>
-                            <ResponsiveDialogDescription>
-                              Your action cannot be undone.
-                            </ResponsiveDialogDescription>
-                          </ResponsiveDialogHeader>
-                          <ResponsiveDialogFooter className="flex gap-2">
-                            <ResponsiveDialogClose asChild>
-                              <Button
-                                type="button"
-                                variant="secondary"
-                                className="w-full"
-                              >
-                                Cancel
-                              </Button>
-                            </ResponsiveDialogClose>
-                            <Button
-                              variant="destructive"
-                              className="w-full"
-                              onClick={() => handleDelete(member.roleId)}
-                            >
-                              Confirm
-                            </Button>
-                          </ResponsiveDialogFooter>
-                        </ResponsiveDialogContent>
-                      </ResponsiveDialog>
-                    </TooltipTrigger>
-                    <TooltipContent align="end" side="left">
-                      {member.role === 'OWNER' ||
-                      (role === 'USER' && member.id !== id) ? (
-                        <p>Cannot Remove Member</p>
-                      ) : (
-                        <p>Remove Member</p>
-                      )}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+              <TableCell>
+                <Skeleton className="h-10 w-full rounded-sm" />
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            list.map((member: Member) => (
+              <TableRow key={member.id}>
+                <TableCell>
+                  <Avatar>
+                    <AvatarImage
+                      src={member.picture}
+                      alt={member.email}
+                      className="rounded-full"
+                    />
+                    <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell>
+                  <div>
+                    <p className="font-medium">{member.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {member.email}
+                    </p>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Select
+                    defaultValue={member.role}
+                    disabled={member.role === 'OWNER' || role === 'USER'}
+                    onValueChange={(value: OrgRole) =>
+                      handleRoleChange(member.roleId, value)
+                    }
+                  >
+                    <SelectTrigger
+                      className="w-[180px]"
+                      defaultValue={member.role}
+                    >
+                      <SelectValue placeholder={member.role} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="OWNER" disabled={role !== 'OWNER'}>
+                        OWNER
+                      </SelectItem>
+                      <SelectItem value="ADMIN" disabled={role === 'USER'}>
+                        ADMIN
+                      </SelectItem>
+                      <SelectItem value="USER">USER</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+                <TableCell className="text-right">
+                  <TooltipProvider>
+                    <Tooltip delayDuration={200}>
+                      <TooltipTrigger>
+                        <ResponsiveDialog>
+                          <ResponsiveDialogTrigger asChild>
+                            <Button
+                              variant="destructive"
+                              size="icon"
+                              className="h-9 w-11 items-center"
+                              disabled={
+                                member.role === 'OWNER' ||
+                                (role === 'USER' && member.id !== id)
+                              }
+                            >
+                              <X className="size-4" />
+                            </Button>
+                          </ResponsiveDialogTrigger>
+                          <ResponsiveDialogContent className="sm:max-w-md">
+                            <ResponsiveDialogHeader>
+                              <ResponsiveDialogTitle>
+                                Are you sure?
+                              </ResponsiveDialogTitle>
+                              <ResponsiveDialogDescription>
+                                Your action cannot be undone.
+                              </ResponsiveDialogDescription>
+                            </ResponsiveDialogHeader>
+                            <ResponsiveDialogFooter className="flex gap-2">
+                              <ResponsiveDialogClose asChild>
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  className="w-full"
+                                >
+                                  Cancel
+                                </Button>
+                              </ResponsiveDialogClose>
+                              <Button
+                                variant="destructive"
+                                className="w-full"
+                                onClick={() => handleDelete(member.roleId)}
+                              >
+                                Confirm
+                              </Button>
+                            </ResponsiveDialogFooter>
+                          </ResponsiveDialogContent>
+                        </ResponsiveDialog>
+                      </TooltipTrigger>
+                      <TooltipContent align="end" side="left">
+                        {member.role === 'OWNER' ||
+                        (role === 'USER' && member.id !== id) ? (
+                          <p>Cannot Remove Member</p>
+                        ) : (
+                          <p>Remove Member</p>
+                        )}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
       {role !== 'USER' && (

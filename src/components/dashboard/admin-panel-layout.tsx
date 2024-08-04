@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import React from 'react';
 import { Provider } from 'react-redux';
 
 import { Navbar } from '@/components/dashboard/navbar';
@@ -49,7 +50,7 @@ export default function AdminPanelLayout({
                   <BreadcrumbLink href="/">{t('home')}</BreadcrumbLink>
                 </BreadcrumbItem>
                 {breadcrumb.map((item, index) => (
-                  <>
+                  <React.Fragment key={item}>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                       {index === breadcrumb.length - 1 ? (
@@ -65,7 +66,7 @@ export default function AdminPanelLayout({
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
-                  </>
+                  </React.Fragment>
                 ))}
               </BreadcrumbList>
             </Breadcrumb>

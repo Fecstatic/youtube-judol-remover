@@ -3,6 +3,7 @@ import { UserNav } from '@/components/dashboard/user-nav';
 import LocaleSwitcher from '@/components/ui/locale-switcher';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 
+import NotificationRequest from './notification';
 import Search from './search';
 
 export function Navbar() {
@@ -14,6 +15,7 @@ export function Navbar() {
           <Search />
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
+          <NotificationRequest />
           <LocaleSwitcher
             className="size-8 rounded-full bg-background"
             size="icon"

@@ -1,4 +1,11 @@
 /* eslint-disable react/button-has-type */
+
+'use client';
+
+import Cookies from 'js-cookie';
+
+import { sendNotification } from '@/actions/Notification';
+import { Button } from '@/components/ui/button';
 import {
   ResponsiveDialog,
   ResponsiveDialogBody,
@@ -12,6 +19,17 @@ import {
 } from '@/components/ui/responsive-dialog';
 
 const DashboardIndexPage = () => {
+  const id = Cookies.get('next-auth.session-token');
+  const Notification = async () => {
+    await sendNotification(
+      'just completed a quest',
+      // @ts-ignore
+      id,
+      'https://boilerplate.fecstatic.site/favicon-32x32.png',
+      'Ferdi Rahmad Rizaldi',
+    );
+  };
+
   return (
     <div>
       <ResponsiveDialog>
@@ -26,8 +44,7 @@ const DashboardIndexPage = () => {
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <ResponsiveDialogBody>
-            This component is built using shadcn/ui&apos;s dialog and drawer
-            component, which is built on top of Vaul.
+            <Button onClick={() => Notification()}>Send Notification</Button>
           </ResponsiveDialogBody>
           <ResponsiveDialogFooter>
             <ResponsiveDialogClose asChild>

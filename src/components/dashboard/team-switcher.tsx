@@ -389,6 +389,7 @@ export default function TeamSwitcher({
               label: data?.list?.name,
               picture: data?.list?.picture,
               value: data?.list?.id,
+              role: data?.list?.role,
             };
 
             // @ts-ignore
@@ -465,7 +466,7 @@ export default function TeamSwitcher({
       setGroups(data);
     }
     fetchData();
-  }, [[personal]]);
+  }, [personal]);
 
   return (
     <ResponsiveDialog
