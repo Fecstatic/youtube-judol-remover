@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.2.0...v1.2.1) (2024-08-04)
+
+
+### Bug Fixes
+
+* add multi device support for notification and fix into proper icon ([a1bdd31](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/commit/a1bdd3170e7c3eaa077500a6e377fa9e194497ca))
+
 # [1.2.0](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.1.0...v1.2.0) (2024-08-04)
 
 
