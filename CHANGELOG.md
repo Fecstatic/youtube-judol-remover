@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.1.0...v1.2.0) (2024-08-04)
+
+
+### Features
+
+* add notification use web-push integrated with PWA ([844c6ba](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/commit/844c6ba026aab217aab7f5d750789397f366451d))
+
 # [1.1.0](https://github.com/frxldi-xyz/fecstatic-saas-nextjs-boilerplate/compare/v1.0.1...v1.1.0) (2024-08-02)
 
 
