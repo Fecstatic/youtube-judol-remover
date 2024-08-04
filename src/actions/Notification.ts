@@ -120,3 +120,14 @@ export const deleteNotification = async (userId: string, device: Device) => {
     return { error: 'Failed to send notification' };
   }
 };
+
+export const getNotifications = async (userId: string) => {
+  try {
+    const data = await db.notification.findMany({
+      where: { userId },
+    });
+    return data;
+  } catch {
+    return [];
+  }
+};

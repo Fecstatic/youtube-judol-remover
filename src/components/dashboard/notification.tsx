@@ -7,7 +7,11 @@ import { BellOff, BellRing } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { addNotification, deleteNotification } from '@/actions/Notification';
+import {
+  addNotification,
+  deleteNotification,
+  getNotifications,
+} from '@/actions/Notification';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -18,16 +22,32 @@ import {
 import { useMediaQuery } from '@/hooks/UseMediaQuery';
 import { urlB64ToUint8Array } from '@/utils/Helpers';
 
+interface NotificationProps {
+  id: string;
+  userId: string;
+  email: string;
+  device: Device;
+  notification: string | null;
+}
+
 export default function NotificationRequest() {
   const id = Cookies.get('next-auth.session-id');
   const email = Cookies.get('next-auth.session-email');
   const queryClient = useQueryClient();
   const isMobile = useMediaQuery(`(max-width: 768px)`);
   const device = isMobile ? Device.MOBILE : Device.DESKTOP;
+  const [notification, setNotification] = useState<NotificationProps>();
 
   const [notificationPermission, setNotificationPermission] = useState<
     'granted' | 'denied' | 'default'
   >('granted');
+
+  const getNotification = async () => {
+    // @ts-ignore
+    const data = await getNotifications(id);
+    // @ts-ignore
+    return setNotification(data);
+  };
 
   const generateSubscribeEndPoint = async (
     newRegistration: ServiceWorkerRegistration,
@@ -95,10 +115,10 @@ export default function NotificationRequest() {
     if ('Notification' in window) {
       Notification.requestPermission().then((permission) => {
         setNotificationPermission(permission);
-        if (permission === 'granted') {
+        if (permission === 'granted' && notification) {
           subscribeUser();
         } else {
-          toast.info('please go to setting and enable noitificatoin.');
+          toast.info('please go to setting and enable noitification.');
         }
       });
     } else {
@@ -107,7 +127,9 @@ export default function NotificationRequest() {
   };
 
   useEffect(() => {
+    getNotification();
     setNotificationPermission(Notification.permission);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -125,9 +147,9 @@ export default function NotificationRequest() {
             }
           >
             {notificationPermission === 'granted' ? (
-              <BellRing className="size-[1.2rem] scale-100" />
+              <BellRing className="size-5" />
             ) : (
-              <BellOff className="size-[1.2rem] scale-100" />
+              <BellOff className="size-5" />
             )}
           </Button>
         </TooltipTrigger>

@@ -38,6 +38,16 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   return {
     title: t('meta_title'),
     description: t('meta_description'),
+    generator: 'Next.js',
+    manifest: '/manifest.json',
+    keywords: ['nextjs', 'nextjs13', 'next13', 'pwa', 'next-pwa'],
+    authors: [
+      { name: 'Ferdi Rahmad Rizaldi' },
+      {
+        name: 'Ferdi Rahmad Rizaldi',
+        url: 'https://www.linkedin.com/in/ferdi-rahmad-rizaldi/',
+      },
+    ],
     icons: [
       {
         rel: 'apple-touch-icon',
