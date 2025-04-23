@@ -29,9 +29,11 @@ import IntlLayout from '@/components/intl-wrapper';
 //   ],
 // };
 
-export async function generateMetadata(props: { params: { locale: string } }) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const t = await getTranslations({
-    locale: props.params.locale,
+    locale: (await props.params).locale,
     namespace: 'Index',
   });
 
@@ -40,7 +42,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
     description: t('meta_description'),
     generator: 'Next.js',
     manifest: '/manifest.json',
-    keywords: ['nextjs', 'nextjs13', 'next13', 'pwa', 'next-pwa'],
+    keywords: ['nextjs', 'nextjs15', 'next15', 'pwa', 'next-pwa'],
     authors: [
       { name: 'Ferdi Rahmad Rizaldi' },
       {
@@ -75,12 +77,12 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 
 export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   return (
-    <html lang={props.params.locale} suppressHydrationWarning>
+    <html lang={(await props.params).locale} suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased">
-        <IntlLayout locale={props.params.locale}>{props.children}</IntlLayout>
+        <IntlLayout>{props.children}</IntlLayout>
       </body>
     </html>
   );

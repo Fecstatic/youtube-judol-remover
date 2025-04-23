@@ -8,6 +8,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.USER_EMAIL,
     pass: process.env.PASS_EMAIL,
   },
+  pool: true,
 });
 
 const domain = process.env.NEXT_PUBLIC_EMAIL_URL;

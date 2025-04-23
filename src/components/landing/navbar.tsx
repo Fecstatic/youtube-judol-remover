@@ -1,11 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import { Button, buttonVariants } from '@/components/ui/button';
 import { ModeToggle } from '@/components/ui/dark-mode';
 import LocaleSwitcher from '@/components/ui/locale-switcher';
 import {
@@ -25,7 +23,6 @@ import { Logo } from './logo';
 
 const Navbar = () => {
   const t = useTranslations('Navbar');
-  const { status } = useSession();
 
   const firstcomponents: {
     title: string;
@@ -103,31 +100,6 @@ const Navbar = () => {
             </li>
             <li>
               <ModeToggle />
-            </li>
-            <li>
-              {status === 'authenticated' ? (
-                <Button variant="destructive" onClick={() => signOut()}>
-                  {t('sign_out')}
-                </Button>
-              ) : (
-                <Link
-                  className={buttonVariants({ variant: 'outline' })}
-                  href="/auth/login"
-                >
-                  {t('sign_in')}
-                </Link>
-              )}
-            </li>
-            <li>
-              {status === 'authenticated' ? (
-                <Link className={buttonVariants()} href="/dashboard">
-                  {t('dashboard')}
-                </Link>
-              ) : (
-                <Link className={buttonVariants()} href="/auth/register">
-                  {t('sign_up')}
-                </Link>
-              )}
             </li>
           </>
         }

@@ -1,37 +1,23 @@
-import { notFound } from 'next/navigation';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 
 import { Toaster } from '@/components/ui/sonner';
-import { AllLocales } from '@/utils/AppConfig';
 import { ThemeProvider } from '@/utils/ThemeProvider';
-import { TrpcProvider } from '@/utils/TrpcProvider';
-
-import SessionWrapper from './session-wrapper';
 
 export default function IntlLayout({
   children,
-  locale,
 }: {
   children: React.ReactNode;
-  locale: string;
 }) {
-  if (!AllLocales.includes(locale)) notFound();
-  const messages = useMessages();
-
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
       >
-        <SessionWrapper>
-          <TrpcProvider>
-            {children}
-            <Toaster position="top-right" richColors closeButton />
-          </TrpcProvider>
-        </SessionWrapper>
+        {children}
+        <Toaster position="top-right" richColors closeButton />
       </ThemeProvider>
     </NextIntlClientProvider>
   );

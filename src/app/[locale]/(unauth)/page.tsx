@@ -5,14 +5,15 @@ import { FAQ } from '@/components/landing/faq';
 import { Footer } from '@/components/landing/footer';
 import { Hero } from '@/components/landing/hero';
 import { Navbar } from '@/components/landing/navbar';
-import { Overview } from '@/components/landing/overview';
 import { Pricing } from '@/components/landing/pricing';
 import { TechStack } from '@/components/landing/tech-stack';
 // import { Sponsors } from '@/components/landing/Sponsors';
 
-export async function generateMetadata(props: { params: { locale: string } }) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const t = await getTranslations({
-    locale: props.params.locale,
+    locale: (await props.params).locale,
     namespace: 'Index',
   });
 
@@ -24,16 +25,15 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 
 export default function IndexPage() {
   return (
-    <>
+    <div className="overflow-y-hidden">
       <Navbar />
       <Hero />
-      <Overview />
       {/* <Sponsors /> */}
       <TechStack />
       <Pricing />
       <FAQ />
       {/* <CTA /> */}
       <Footer />
-    </>
+    </div>
   );
 }
