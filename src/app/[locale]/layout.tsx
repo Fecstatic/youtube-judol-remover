@@ -76,7 +76,7 @@ export async function generateMetadata(props: {
 }
 
 export default async function RootLayout(props: {
-  children: React.ReactNode;
+  children: React.JSX.Element;
   params: Promise<{ locale: string }>;
 }) {
   return (

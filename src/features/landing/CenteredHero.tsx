@@ -1,11 +1,8 @@
 import Link from 'next/link';
 
 import { badgeVariants } from '@/components/ui/badge';
-import { HoverBorderGradient } from '@/components/ui/hover-border-gradient';
 
 const CenteredHero = (props: {
-  logo: React.ReactNode;
-  name: string;
   banner: {
     href: string;
     text: React.ReactNode;
@@ -18,7 +15,10 @@ const CenteredHero = (props: {
   <>
     <div className="animate-fade-up text-center opacity-0 [--animation-delay:150ms] [perspective:2000px]">
       <Link
-        className={badgeVariants({ variant: 'banner' })}
+        className={badgeVariants({
+          variant: 'banner',
+          className: 'bg-red-500 hover:bg-red-600',
+        })}
         href={props.banner.href}
         target="_blank"
         rel="noopener"
@@ -27,18 +27,7 @@ const CenteredHero = (props: {
       </Link>
     </div>
 
-    <div className="my-5 flex animate-fade-up justify-center opacity-0 [--animation-delay:150ms] [perspective:2000px]">
-      <HoverBorderGradient
-        containerClassName="rounded-full"
-        as="button"
-        className="flex items-center space-x-2 text-white dark:text-black"
-      >
-        {props.logo}
-        <span>{props.name}</span>
-      </HoverBorderGradient>
-    </div>
-
-    <h1 className="animate-fade-up text-center text-3xl font-bold text-black opacity-0 [--animation-delay:200ms] [perspective:2000px] dark:text-white lg:text-7xl">
+    <h1 className="animate-fade-up py-5 text-center text-3xl font-bold text-black opacity-0 [--animation-delay:200ms] [perspective:2000px] dark:text-white lg:text-7xl">
       {props.title}
     </h1>
 

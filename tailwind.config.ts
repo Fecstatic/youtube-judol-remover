@@ -37,9 +37,14 @@ const config = {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
         },
+        dashboard: {
+          DEFAULT: 'hsl(var(--card))',
+          background: 'hsl(var(--dashboard-background))',
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+          border: 'hsl(var(--card-border))',
         },
       },
       borderRadius: {

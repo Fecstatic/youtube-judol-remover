@@ -37,6 +37,7 @@ export default function LocaleSwitcher({
         <Button
           className={cn('focus-visible:ring-offset-0', className)}
           variant="outline"
+          size="icon"
           {...props}
         >
           <Globe className="size-5" />
