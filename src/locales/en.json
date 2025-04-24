@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "Fecstatic - Easy to use Advanced SaaS Template.",
-    "meta_description": "An advance template for your SaaS business, built with TypeScript, Shadcn UI, Tailwind CSS, Prisma, and more."
+    "meta_title": "Judol Youtube Comment Remove - Fecstatic",
+    "meta_description": "Delete youtube judol related comment in easy way."
   },
   "Error": {
     "meta_title": "Error - Fecstatic",
@@ -15,13 +15,24 @@
     "secondary_button": "GitHub Project"
   },
   "Footer": {
-    "created_by": "Created by {author}."
+    "created_by": "Created by <author></author>"
   },
   "Dashboard": {
     "video_list_title": "Your Videos",
     "video_list_description": "Showing {video} most recent",
     "video_list_empty": "No videos found",
     "publish_on": "Published on {date}",
-    "logout": "Logout"
+    "logout": "Logout",
+    "deleted_comments": "Deleted Comments",
+    "delete": "Delete",
+    "delete_judol_comment": "Delete online gambling comments in this video",
+    "getting_started": "Getting Started",
+    "getting_started_description": "To get started, you need to login with your <link>Google API</link>.",
+    "client_secret": "Client Secret",
+    "client_secret_placeholder": "Enter your client secret",
+    "client_id": "Client ID",
+    "client_id_placeholder": "Enter your client ID",
+    "submit": "Login",
+    "comment_on": "on {date}"
   }
 }

@@ -10,7 +10,7 @@ const CenteredFooter = (props: { iconList: React.ReactNode }) => {
   return (
     <footer>
       <hr className="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8" />
-      <div className="mx-auto flex max-w-screen-xl place-content-center items-center justify-between">
+      <div className="mx-auto flex max-w-screen-xl flex-col items-center justify-between md:flex-row">
         <span>
           Copyright © {new Date().getFullYear()}.{' '}
           {t.rich('created_by', {

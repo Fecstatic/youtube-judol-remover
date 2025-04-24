@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "Fecstatic - Template SaaS yang mudah digunakan.",
-    "meta_description": "Template mutakhir untuk bisnis SaaS, dibangun dengan TypeScript, Shadcn UI, Tailwind CSS, Prisma, dan lainnya."
+    "meta_title": "Judol Youtube Comment Remove - Fecstatic",
+    "meta_description": "Hapus komentar judol dengan mudah."
   },
   "Error": {
     "meta_title": "Error - Fecstatic",
@@ -22,6 +22,17 @@
     "video_list_description": "Menampilkan {video} terbaru",
     "video_list_empty": "No videos found",
     "publish_on": "Diterbitkan pada {date}",
-    "logout": "Keluar"
+    "logout": "Keluar",
+    "deleted_comments": "Komentar dihapus",
+    "delete": "Hapus",
+    "delete_judol_comment": "Hapus komentar judol dari video ini",
+    "getting_started": "Memulai",
+    "getting_started_description": "Untuk memulai, kamu harus masuk dengan <link>Google API</link>.",
+    "client_secret": "Client Secret",
+    "client_id": "Client ID",
+    "client_secret_placeholder": "Masukkan Client Secret",
+    "client_id_placeholder": "Masukkan Client ID",
+    "submit": "Masuk",
+    "comment_on": "pada {date}"
   }
 }

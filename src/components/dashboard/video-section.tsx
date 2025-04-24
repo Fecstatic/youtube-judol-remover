@@ -9,6 +9,10 @@ import {
 } from '../ui/card';
 import VideoCard from './video-card';
 
+interface Session {
+  accessToken: string;
+}
+
 interface Video {
   id: {
     videoId: string;
@@ -23,7 +27,13 @@ interface Video {
   };
 }
 
-export default function VideoSection({ videos }: { videos: Video[] }) {
+export default function VideoSection({
+  session,
+  videos,
+}: {
+  session: Session;
+  videos: Video[];
+}) {
   const t = useTranslations('Dashboard');
   return (
     <Card>
@@ -37,7 +47,11 @@ export default function VideoSection({ videos }: { videos: Video[] }) {
         {videos.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {videos.map((video) => (
-              <VideoCard key={video.id.videoId} video={video} />
+              <VideoCard
+                key={video.id.videoId}
+                video={video}
+                session={session}
+              />
             ))}
           </div>
         ) : (
