@@ -15,10 +15,7 @@ const CenteredFooter = (props: { iconList: React.ReactNode }) => {
           Copyright © {new Date().getFullYear()}.{' '}
           {t.rich('created_by', {
             author: () => (
-              <Link
-                className="text-primary"
-                href="https://studio.fecstatic.tech"
-              >
+              <Link className="text-primary" href="https://fecstatic.com">
                 Fecstatic
               </Link>
             ),

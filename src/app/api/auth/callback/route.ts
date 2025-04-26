@@ -7,22 +7,17 @@ import { createSession } from '@/actions/session';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
-  console.log('code', code);
 
   if (!code) {
-    return NextResponse.redirect(
-      new URL('/login?error=missing_code', request.url),
-    );
+    return NextResponse.redirect('/login?error=missing_code');
   }
 
   try {
     const { user, tokens } = await getGoogleUser(code);
     await createSession({ user, accessToken: tokens.access_token });
 
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect('/dashboard');
   } catch (error) {
-    return NextResponse.redirect(
-      new URL('/login?error=auth_failed', request.url),
-    );
+    return NextResponse.redirect('/login?error=auth_failed');
   }
 }
