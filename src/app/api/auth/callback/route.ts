@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code');
 
   if (!code) {
-    return NextResponse.redirect('/login?error=missing_code');
+    return NextResponse.redirect('/error');
   }
 
   try {
@@ -18,6 +18,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.redirect('/dashboard');
   } catch (error) {
-    return NextResponse.redirect('/login?error=auth_failed');
+    return NextResponse.redirect('/error');
   }
 }
