@@ -36,9 +36,18 @@ export async function getVideoComments(
       publishedAt: item.snippet?.topLevelComment?.snippet?.publishedAt,
     }));
 
-    const filteredComments = comments?.filter(
-      (comment) => comment?.text !== comment?.text?.normalize('NFKD'),
-    );
+    const blockList = await import('../../block.json').then((m) => m.default);
+
+    const filteredComments = comments?.filter((comment) => {
+      if (!comment?.text) return false;
+      // Filter normalisasi NFKD dari simbol aneh
+      const isNormalized = comment.text !== comment.text.normalize('NFKD');
+      // Filter berdasarkan kata-kata yang diblokir
+      const hasBlockedChar = blockList.some((char) =>
+        comment?.text?.toLowerCase().includes(char.toLowerCase()),
+      );
+      return isNormalized || hasBlockedChar;
+    });
 
     return filteredComments || [];
   } catch (error) {
