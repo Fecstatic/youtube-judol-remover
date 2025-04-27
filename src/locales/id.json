@@ -15,7 +15,7 @@
     "secondary_button": "Projek GitHub"
   },
   "Footer": {
-    "created_by": "Dibuat oleh {author}."
+    "created_by": "Dibuat oleh <author></author>"
   },
   "Dashboard": {
     "video_list_title": "Video Anda",
