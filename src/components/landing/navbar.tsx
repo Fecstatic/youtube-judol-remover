@@ -36,7 +36,7 @@ const Navbar = () => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/docs" passHref>
+              <Link href="https://youtu.be/l7qqP1-awq4" passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Tutorial
                 </NavigationMenuLink>

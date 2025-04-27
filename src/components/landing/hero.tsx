@@ -14,7 +14,7 @@ const Hero = () => {
     <div className="mx-3 flex max-w-screen-xl flex-col place-content-center items-center py-8 lg:mx-auto lg:py-48">
       <CenteredHero
         banner={{
-          href: 'https://instagram.com/fecstatic',
+          href: 'https://youtu.be/l7qqP1-awq4',
           text: (
             <>
               <VideoIcon className="mr-1 size-5" /> {t('follow_twitter')}
