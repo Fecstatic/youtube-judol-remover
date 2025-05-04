@@ -14,8 +14,8 @@ Project ini adalah open source. Feel free kalau teman-teman mau berkontribusi ^_
 
 1. Buat project baru di [Google Cloud Console](https://console.cloud.google.com).
 2. Klik tab di sebelah kiri dan pilih **API & Services**.
-3. Cari **YouTube Data API v3**, pilih, lalu klik **Enable**.
-4. Klik tab kiri, pilih **Recently Visited**, lalu pilih **Client Google Auth Platform**.
+3. Cari [**YouTube Data API v3**](https://console.cloud.google.com/apis/library/youtube.googleapis.com), pilih, lalu klik **Enable**.
+4. Klik tab sebelah kiri dan pilih [**Client - Google Auth Platform**](https://console.cloud.google.com/auth/clients).
 5. Klik **Get Started** dan isi seluruh form yang tersedia.
 6. Klik **Create OAuth Client**.
 7. Isi nama dan informasi lainnya sesuai kebutuhan.
